@@ -1,0 +1,84 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.2'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'org.example'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    // Lombok (편의성 도구)
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+
+    // Spring Security (보안 관련)
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.springframework.security:spring-security-crypto'
+
+    // JWT 처리 (필요한 경우, 게이트웨이에서 JWT 검증을 수행하지 않고 Feed 서비스에서도 처리할 경우)
+    implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-impl:0.11.2'
+    implementation 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
+    // MySQL 및 JPA (게시글 데이터 저장)
+    runtimeOnly 'com.mysql:mysql-connector-j'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+
+    // Eureka Client (MSA 서비스 디스커버리)
+    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+
+    // Redis (캐싱, 토큰 저장 등)
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+
+    // 웹 (리액티브 웹 사용 - 필요에 따라 spring-boot-starter-web으로 변경 가능)
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+    // Kafka (이벤트 스트리밍, 서비스 간 통신)
+    implementation 'org.apache.kafka:kafka-streams'
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+    // Actuator (모니터링, 헬스 체크 등)
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+
+    // OpenFeign (서비스 간 HTTP 통신)
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+    // Resilience4j (서킷 브레이커 등 장애 대응)
+    implementation 'io.github.resilience4j:resilience4j-spring-boot2'
+
+    // MapStruct (DTO 변환, 편리한 매핑)
+    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+
+    // Micrometer + Prometheus (애플리케이션 모니터링)
+    implementation 'io.micrometer:micrometer-registry-prometheus'
+
+    // Spring Boot Validation (입력값 검증)
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Test Dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'io.projectreactor:reactor-test'
+    testImplementation 'org.springframework.security:spring-security-test'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+
+    compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
