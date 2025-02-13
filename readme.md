@@ -2,3 +2,5 @@
 ₩₩₩docker-compose up -d₩₩₩
 또는
 ₩₩₩docker compose up -d₩₩₩
+
+## 포트번호 8084
