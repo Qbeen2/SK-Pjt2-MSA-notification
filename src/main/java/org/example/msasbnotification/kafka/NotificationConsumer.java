@@ -1,33 +1,42 @@
 package org.example.msasbnotification.kafka;
 
+import org.example.msasbnotification.dto.NotificationDto;
 import org.example.msasbnotification.service.NotificationService;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
+@RequiredArgsConstructor
+@Slf4j
 public class NotificationConsumer {
-
     private final NotificationService notificationService;
 
-    public NotificationConsumer(NotificationService notificationService) {
-        this.notificationService = notificationService;
+    @KafkaListener(topics = "notification-dm", groupId = "notification-group")
+    public void consumeDM(NotificationDto notificationDto) {
+        log.info("📩 DM 알림 수신: {}", notificationDto);
+        notificationService.saveNotification(notificationDto);
     }
 
-    @KafkaListener(topics = "dm.events", groupId = "notification-group")
-    public void consumeDmEvent(String message) {
-        System.out.println("Received DM event: " + message);
-        notificationService.processDmNotification(message);
+    @KafkaListener(topics = "notification-follow", groupId = "notification-group")
+    public void consumeFollow(NotificationDto notificationDto) {
+        log.info("➕ 팔로우 알림 수신: {}", notificationDto);
+        notificationService.saveNotification(notificationDto);
     }
 
-    @KafkaListener(topics = "follow.events", groupId = "notification-group")
-    public void consumeFollowEvent(String message) {
-        System.out.println("Received Follow event: " + message);
-        notificationService.processFollowNotification(message);
+    @KafkaListener(topics = "notification-post-create", groupId = "notification-group")
+    public void consumeNewPost(NotificationDto notificationDto) {
+        log.info("📝 새 게시글 알림 수신: {}", notificationDto);
+        notificationService.saveNotification(notificationDto);
     }
 
-    @KafkaListener(topics = "post.created", groupId = "notification-group")
-    public void consumeNewPostEvent(String message) {
-        System.out.println("Received New Post event: " + message);
-        notificationService.processNewPostNotification(message);
+    @KafkaListener(topics = "notification-comment", groupId = "notification-group")
+    public void consumeNewComment(NotificationDto notificationDto) {
+        log.info("💬 댓글 알림 수신: {}", notificationDto);
+        notificationService.saveNotification(notificationDto);
     }
+
+    // 좋아요 알림도 추가할것
+
 }

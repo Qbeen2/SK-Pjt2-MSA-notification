@@ -1,22 +1,47 @@
 package org.example.msasbnotification.service;
 
+import lombok.RequiredArgsConstructor;
+import org.example.msasbnotification.dto.NotificationDto;
+import org.example.msasbnotification.entity.NotificationEntity;
+import org.example.msasbnotification.repository.NotificationRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
+@RequiredArgsConstructor
 public class NotificationService {
+    private final NotificationRepository notificationRepository;
 
-    public void processDmNotification(String message) {
-        // DM 이벤트 처리 로직 구현 (예: JSON 파싱 후 대상 사용자에게 DM 알림 생성)
-        System.out.println("Processing DM notification: " + message);
+    // 알림 저장
+    public NotificationDto saveNotification(NotificationDto dto) {
+        NotificationEntity entity = NotificationEntity.builder()
+                .receiverId(dto.getReceiverId())
+                .type(dto.getType())
+                .content(dto.getContent())
+                .timestamp(dto.getTimestamp())
+                .build();
+
+        NotificationEntity savedEntity = notificationRepository.saveNotification(entity);
+        return convertToDto(savedEntity);
     }
 
-    public void processFollowNotification(String message) {
-        // 팔로우 이벤트 처리 로직 구현 (예: JSON 파싱 후 대상 사용자에게 '새로운 팔로워' 알림 생성)
-        System.out.println("Processing Follow notification: " + message);
+    // 특정 사용자의 알림 조회
+    public List<NotificationDto> getNotificationsByUser(Long userId) {
+        List<NotificationEntity> entities = notificationRepository.findByReceiverId(userId);
+        return entities.stream().map(this::convertToDto).collect(Collectors.toList());
     }
 
-    public void processNewPostNotification(String message) {
-        // 신규 포스트 이벤트 처리 로직 구현 (예: JSON 파싱 후 작성자의 팔로워들에게 '신규 포스트' 알림 생성)
-        System.out.println("Processing New Post notification: " + message);
+    // Entity -> DTO 변환
+    private NotificationDto convertToDto(NotificationEntity entity) {
+        return NotificationDto.fromEntity(entity);
     }
+
+    // Entity 리스트 -> DTO 리스트 변환 (새로운 메서드 추가)
+    public List<NotificationDto> convertToDtoList(List<NotificationEntity> entities) {
+        return entities.stream().map(this::convertToDto).collect(Collectors.toList());
+    }
+
+
 }
