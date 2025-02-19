@@ -81,6 +81,10 @@ dependencies {
 
     compileOnly 'jakarta.servlet:jakarta.servlet-api:6.0.0'
 
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
+
+
+
 }
 
 dependencyManagement {

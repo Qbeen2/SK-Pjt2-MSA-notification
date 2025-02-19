@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.msasbnotification.dto.NotificationCreateDto;
 import org.example.msasbnotification.dto.NotificationDto;
+import org.example.msasbnotification.entity.NotificationEntity;
 import org.example.msasbnotification.service.NotificationService;
 import org.example.msasbnotification.repository.NotificationRepository;
 import org.springframework.web.bind.annotation.*;
@@ -33,7 +34,6 @@ public class NotificationController {
                 .receiverId(createDto.getUserId())
                 .type(createDto.getType())
                 .content(createDto.getMessage())
-                .timestamp(LocalDateTime.now())
                 .isRead(createDto.getIsRead()) // 전달된 값, 보통 false
                 .build();
 
@@ -60,5 +60,12 @@ public class NotificationController {
 
         log.info("Marking notification {} as read for user: {} with token: {}", id, email, accessToken);
         notificationService.markNotificationAsRead(id);
+    }
+
+    // 테스트용: 모든 유저의 알림을 읽음 처리 없이 조회
+    @GetMapping("/all")
+    public List<NotificationDto> getAllNotifications() {
+        log.info("모든 알림 조회 요청");
+        return notificationService.getAllNotifications();
     }
 }

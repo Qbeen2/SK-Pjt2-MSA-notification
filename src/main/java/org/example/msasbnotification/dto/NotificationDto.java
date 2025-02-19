@@ -4,8 +4,6 @@ import lombok.Builder;
 import lombok.Data;
 import org.example.msasbnotification.entity.NotificationEntity;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 public class NotificationDto {
@@ -13,8 +11,9 @@ public class NotificationDto {
     private Long receiverId;
     private String type;
     private String content;
-    private LocalDateTime timestamp;
-    private Boolean isRead;   // 읽음 여부
+    // 타임스탬프 제거
+    // private LocalDateTime timestamp;
+    private Boolean isRead;
 
     public static NotificationDto fromEntity(NotificationEntity entity) {
         return NotificationDto.builder()
@@ -22,7 +21,6 @@ public class NotificationDto {
                 .receiverId(entity.getReceiverId())
                 .type(entity.getType())
                 .content(entity.getContent())
-                .timestamp(entity.getTimestamp())
                 .isRead(entity.getIsRead())
                 .build();
     }
