@@ -3,8 +3,10 @@ package org.example.msasbnotification.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 
@@ -14,11 +16,17 @@ import java.util.Map;
 @Configuration
 public class KafkaConsumerConfig {
 
+    @Autowired
+    private Environment env;
+
     @Bean
     public DefaultKafkaConsumerFactory<String, String> consumerFactory() {
         Map<String, Object> props = new HashMap<>();
         // Kafka 브로커 주소 (환경에 맞게 수정)
-        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+
+        String release_ip = env.getProperty("app.kafka_ip");
+
+        props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, release_ip);
         // 그룹 ID (NotificationConsumer에서 사용한 값과 일치)
         props.put(ConsumerConfig.GROUP_ID_CONFIG, "notification-group");
         // Key와 Value의 역직렬화 클래스
