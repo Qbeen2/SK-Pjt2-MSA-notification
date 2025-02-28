@@ -43,7 +43,7 @@ dependencies {
     // Eureka Client (MSA 서비스 디스커버리)
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
 
-    // Redis (캐싱, 토큰 저장 등)
+    //Redis (캐싱, 토큰 저장 등)
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
 
     // 웹 (리액티브 웹 사용 - 필요에 따라 spring-boot-starter-web으로 변경 가능)
