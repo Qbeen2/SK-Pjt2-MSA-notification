@@ -16,6 +16,7 @@ public class NotificationService {
 
     // 알림 저장
     public NotificationDto saveNotification(NotificationDto dto) {
+        System.out.println("Service : Saving notification");
         NotificationEntity entity = NotificationEntity.builder()
                 .receiverId(dto.getReceiverId())
                 .type(dto.getType())
