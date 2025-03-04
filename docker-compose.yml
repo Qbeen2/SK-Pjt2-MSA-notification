@@ -21,16 +21,3 @@ services:
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://34.212.241.179:9092
 
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-
-  # 🟢 Kafka 관리 도구 (웹 UI)
-  kafdrop:
-    image: obsidiandynamics/kafdrop
-    container_name: kafdrop
-    restart: always
-    depends_on:
-      - kafka
-    ports:
-      - "9000:9000"
-    environment:
-      KAFKA_BROKERCONNECT: "kafka:9092"
-
